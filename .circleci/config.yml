@@ -11,7 +11,7 @@ jobs:
       - image: circleci/postgres:latest
         environment:
           - POSTGRES_USER: postgres
-          - POSTGRES_PASSWORD: postgress
+          - POSTGRES_PASSWORD: postgres
           
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
