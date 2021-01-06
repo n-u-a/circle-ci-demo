@@ -16,7 +16,7 @@ public class IndexController {
     @RequestMapping({ "/", "/index" })
     public ModelAndView get(ModelAndView mav) {
         mav.addObject("names", service.getAll());
-        mav.setViewName("index");
+        mav.setViewName("circle-ci-share");
         return mav;
     }
 }

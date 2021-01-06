@@ -2,6 +2,7 @@ package com.example.demopro.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +29,8 @@ public class IndexControllerTest {
 
   @Test
   public void getIndexTest() throws Exception {
-    mockMvc.perform(get("/")).andExpect(status().isOk());
+    mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("circle-ci-share"));
+    ;
 
     // mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"))
     // .andExpect(xpath("/html/body/h1").string("Hello CircleCI !!"));
