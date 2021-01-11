@@ -15,7 +15,6 @@ public class IndexController {
 
     @RequestMapping({ "/", "/index" })
     public ModelAndView get(ModelAndView mav) {
-        mav.addObject("names", service.getAll());
         mav.setViewName("index");
         return mav;
     }
