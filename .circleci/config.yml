@@ -40,12 +40,17 @@ jobs:
             - v1-dependencies-
 
       - run: gradle dependencies
+      - run: gradle build -x test
 
       - save_cache:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
+      - persist_to_workspace: 
+          root: ~/repo
+          paths: 
+            - .
       # run tests!
       # - run: gradle test
 
@@ -55,10 +60,6 @@ jobs:
 
       # - store_test_results:
       #     path: ./build/test-results
-      - persist_to_workspace: 
-          root: ~/repo
-          paths: 
-            - .
   
   test:
     executor:
