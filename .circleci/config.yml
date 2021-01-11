@@ -2,16 +2,20 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-version: 2
-jobs:
-  build:
+version: 2.1
+executors: 
+  my-executor:
     docker:
-      # specify the version you desire here
       - image: cimg/openjdk:8.0
       - image: circleci/postgres:9.4
         environment:
           - POSTGRES_USER: postgres
           - POSTGRES_PASSWORD: postgres
+
+jobs:
+  build:
+    executor:
+      name: my-executor
           
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
