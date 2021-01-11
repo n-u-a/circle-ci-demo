@@ -7,8 +7,8 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
-      - image: circleci/postgres:latest
+      - image: cimg/openjdk:8.0
+      - image: circleci/postgres:9.4
         environment:
           - POSTGRES_USER: postgres
           - POSTGRES_PASSWORD: postgres
@@ -52,3 +52,8 @@ jobs:
       - store_test_results:
           path: ./build/test-results
 
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - build
