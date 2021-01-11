@@ -55,12 +55,18 @@ jobs:
 
       # - store_test_results:
       #     path: ./build/test-results
+      - persist_to_workspace: 
+          root: ~/repo
+          paths: 
+            - .
   
   test:
     executor:
       name: my-executor
     
     steps:
+      - attach_workspace:
+          at: ~/repo
       # run tests!
       - run: gradle test
 
