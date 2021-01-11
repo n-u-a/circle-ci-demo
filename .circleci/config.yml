@@ -30,36 +30,24 @@ jobs:
       TERM: dumb
 
     steps:
-      - checkout
-
-      # Download and cache dependencies
+      - checkout 
+      # 依存関係をダウンロードしてキャシュする
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
+          - v1-dependencies-{{ .Branch }}-{{ checksum "build.gradle" }}
+          - v1-dependencies-{{ .Branch }}-
+          - v1-dependencies-
       - run: gradle dependencies
       - run: gradle build -x test
-
       - save_cache:
           paths:
             - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
-
+          key: v1-dependencies-{{ .Branch }}-{{ checksum "build.gradle" }}
+      # 他のjobでも共有する
       - persist_to_workspace: 
           root: ~/repo
           paths: 
             - .
-      # run tests!
-      # - run: gradle test
-
-      # - store_artifacts:
-      #     path: ./build/reports
-      #     destination: reports
-
-      # - store_test_results:
-      #     path: ./build/test-results
   
   test:
     executor:
