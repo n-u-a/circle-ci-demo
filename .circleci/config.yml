@@ -14,8 +14,8 @@ executors:
           - GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
       - image: circleci/postgres:9.4
         environment:
-          - POSTGRES_USER: postgres
-          - POSTGRES_PASSWORD: postgres
+          - POSTGRES_USER: ${POSTGRES_USER}
+          - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
 jobs:
   build:
@@ -73,9 +73,7 @@ jobs:
     steps:
       - run:
           name: deploy mock
-          command: |
-            env > env.txt
-            cat env.txt
+          command: echo deployed!!
 
 workflows:
   version: 2
