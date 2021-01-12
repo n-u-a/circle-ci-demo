@@ -6,7 +6,7 @@ version: 2.1
 executors: 
   my-executor:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: cimg/openjdk:8.0
         environment:
       # Customize the JVM maximum heap limit
           - JVM_OPTS: -Xmx3200m
@@ -78,6 +78,7 @@ jobs:
             - ${FINGERPRINT}
       - run : sudo apt update
       - run : sudo apt install -y rsync
+      - run : mkdir ~/.ssh
       - run : ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
       - deploy:
           name: deploy
