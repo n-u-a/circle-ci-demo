@@ -76,6 +76,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - ${FINGERPRINT}
+      - run : sudo apt update
       - run : sudo apt install -y rsync
       - run : ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
       - deploy:
