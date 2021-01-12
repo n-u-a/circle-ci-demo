@@ -29,7 +29,7 @@ public class IndexControllerTest {
 
   @Test
   public void getIndexTest() throws Exception {
-    mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"));
+    mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("circle-ci-share"));
     ;
 
     // mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"))
