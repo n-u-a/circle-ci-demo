@@ -80,6 +80,7 @@ jobs:
       - run : sudo apt install -y rsync
       - run : mkdir ~/.ssh
       - run : ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
+      - run : gradle build
       - deploy:
           name: deploy
           command: |
