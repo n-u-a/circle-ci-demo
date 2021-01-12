@@ -83,9 +83,9 @@ jobs:
       - deploy:
           name: deploy
           command: |
-            ssh ${USER_NAME}@${HOST_NAME} "service ${APP_NAME} stop"
+            ssh ${USER_NAME}@${HOST_NAME} "sudo service ${APP_NAME} stop"
             rsync -vc ${BUILD_APP} ${USER_NAME}@${HOST_NAME}:${APP_DIR}
-            ssh ${USER_NAME}@${HOST_NAME} "service ${APP_NAME} start"
+            ssh ${USER_NAME}@${HOST_NAME} "sudo service ${APP_NAME} start"
 
 workflows:
   version: 2
