@@ -57,13 +57,15 @@ jobs:
           name: run test !!
           command: gradle test
 
-      # テストログをartifactとして保存
+      # テストログをartifactとしてアップロード
       - store_artifacts:
           path: ./build/reports
           destination: reports
-
-      # - store_test_results:
-      #     path: ./build/test-results
+      
+      # テストメタデータを
+      # テストサマリーセクションから確認できるようにアップロード
+      - store_test_results:
+          path: ./build/test-results
 
   deploy:
     executor:
@@ -97,7 +99,7 @@ workflows:
       - deploy:
           requires:
             - test
-          # filters:
-          #   branches:
-          #     only:
-          #       - master
+          filters:
+            branches:
+              only:
+                - master
