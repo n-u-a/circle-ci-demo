@@ -44,7 +44,7 @@ jobs:
           key: v1-dependencies-{{ .Branch }}-{{ checksum "build.gradle" }}
       # 他のjobでも共有する
       - persist_to_workspace: 
-          root: ~/repo
+          root: ./build/libs
           paths: 
             - .
   
@@ -54,7 +54,7 @@ jobs:
     working_directory: ~/repo
     steps:
       - attach_workspace:
-          at: ~/repo
+          at: ./build/libs
       # run tests!
       - run: gradle test
 
@@ -71,7 +71,7 @@ jobs:
     working_directory: ~/repo
     steps:
       - attach_workspace:
-          at: ~/repo
+          at: ./build/libs
       - add_ssh_keys:
           fingerprints:
             - ${FINGERPRINT}
@@ -79,7 +79,6 @@ jobs:
       - run : sudo apt install -y rsync
       - run : mkdir ~/.ssh
       - run : ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
-      - run : gradle build
       - deploy:
           name: deploy
           command: |
