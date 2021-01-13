@@ -54,7 +54,7 @@ jobs:
     working_directory: ~/repo
     steps:
       - attach_workspace:
-          at: ./build/libs
+          at: ~/repo
       # run tests!
       - run: gradle test
 
@@ -71,7 +71,7 @@ jobs:
     working_directory: ~/repo
     steps:
       - attach_workspace:
-          at: ./build/libs
+          at: ~/repo
       - add_ssh_keys:
           fingerprints:
             - ${FINGERPRINT}
@@ -97,7 +97,7 @@ workflows:
       - deploy:
           requires:
             - test
-          filters:
-            branches:
-              only:
-                - master
+          # filters:
+          #   branches:
+          #     only:
+          #       - master
