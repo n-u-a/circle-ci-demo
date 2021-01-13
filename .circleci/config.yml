@@ -44,7 +44,7 @@ jobs:
           key: v1-dependencies-{{ .Branch }}-{{ checksum "build.gradle" }}
       # 他のjobでも共有する
       - persist_to_workspace: 
-          root: ./build/libs
+          root: ~/repo
           paths: 
             - .
   
