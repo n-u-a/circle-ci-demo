@@ -74,14 +74,14 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - checkout
+      # フィンガープリントを指定して、使用するsshキーを追加
       - add_ssh_keys:
           fingerprints:
             - ${FINGERPRINT}
       - run : sudo apt update
       - run : sudo apt install -y rsync
-      # - run : mkdir ~/.ssh
-      # - run : ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
+      - run : mkdir ~/.ssh
+      - run : ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
       - run:
           name: deploy
           command: |
