@@ -37,7 +37,6 @@ jobs:
           - v1-dependencies-{{ .Branch }}-{{ checksum "build.gradle" }}
           - v1-dependencies-{{ .Branch }}-
           - v1-dependencies-
-      - run: gradle dependencies
       - run: gradle build -x test
       - save_cache:
           paths:
