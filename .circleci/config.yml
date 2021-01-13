@@ -68,8 +68,8 @@ jobs:
           path: ./build/test-results
 
   deploy:
-    executor:
-      name: my-executor
+    docker:
+      - image: cimg/openjdk:8.0
     working_directory: ~/repo
     steps:
       - attach_workspace:
