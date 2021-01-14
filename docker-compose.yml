@@ -1,0 +1,25 @@
+version: '3.2'
+services:
+    db:
+        image: postgres:latest
+        container_name: springDB
+        restart: always
+        # ports:
+        #     - 5432:5432
+        environment:
+            POSTGRES_USER: 'postgres'
+            POSTGRES_PASSWORD: 'password'
+        volumes:
+            - ./init_db:/docker-entrypoint-initdb.d
+    java:
+        build: .
+        container_name: spring
+        restart: always
+        ports:
+            - 8080:8080
+        tty: true
+        stdin_open: true
+        volumes: 
+            - '.:/usr/local/src/demopro'
+        depends_on:
+            - db
