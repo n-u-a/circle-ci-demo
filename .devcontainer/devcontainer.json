@@ -36,7 +36,8 @@
 		"p1c2u.docker-compose",
 		"arjun.swagger-viewer",
 		"redhat.vscode-yaml",
-		"pivotal.vscode-boot-dev-pack"
+		"pivotal.vscode-boot-dev-pack",
+		"redhat.java"
 	]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
