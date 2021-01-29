@@ -40,9 +40,9 @@ jobs:
           key: v1-dependencies-{{ .Branch }}-{{ checksum "build.gradle" }}
       # 他のjobでも共有するために、workspaceを永続化
       - persist_to_workspace:
-          root: ~/repo
+          root: /tmp/dir
           paths:
-            - .
+            - ./build/libs
 
   test:
     executor:
@@ -51,7 +51,7 @@ jobs:
     steps:
       # 永続化したworkspaceにattach
       - attach_workspace:
-          at: ~/repo
+          at: /tmp/dir
 
       - run:
           name: run test !!
