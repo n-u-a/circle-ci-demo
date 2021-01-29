@@ -1,17 +1,17 @@
 version: 2.1
 # 共通して使用するexecutorを定義
-executors: 
+executors:
   my-executor:
     docker:
       - image: cimg/openjdk:8.0
         environment:
-          - JVM_OPTS: -Xmx3200m
-          - TERM: dumb
-          - GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+          JVM_OPTS: -Xmx3200m
+          TERM: dumb
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
       - image: circleci/postgres:9.4
         environment:
-          - POSTGRES_USER: postgres
-          - POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
 
 jobs:
   build:
@@ -24,13 +24,13 @@ jobs:
 
     steps:
       # ソースコードをチェックアウト
-      - checkout 
+      - checkout
       # 依存関係をリストア
       - restore_cache:
           keys:
-          - v1-dependencies-{{ .Branch }}-{{ checksum "build.gradle" }}
-          - v1-dependencies-{{ .Branch }}-
-          - v1-dependencies-
+            - v1-dependencies-{{ .Branch }}-{{ checksum "build.gradle" }}
+            - v1-dependencies-{{ .Branch }}-
+            - v1-dependencies-
       # testを除外してbuildを実施
       - run: gradle build -x test
       # 依存関係を保存
@@ -39,9 +39,9 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ .Branch }}-{{ checksum "build.gradle" }}
       # 他のjobでも共有するために、workspaceを永続化
-      - persist_to_workspace: 
+      - persist_to_workspace:
           root: ~/repo
-          paths: 
+          paths:
             - .
 
   test:
@@ -53,7 +53,7 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
-      - run: 
+      - run:
           name: run test !!
           command: gradle test
 
@@ -61,7 +61,7 @@ jobs:
       - store_artifacts:
           path: ./build/reports
           destination: reports
-      
+
       # テストメタデータを
       # テストサマリーセクションから確認できるようにアップロード
       - store_test_results:
@@ -78,10 +78,10 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - ${FINGERPRINT}
-      - run : sudo apt update
-      - run : sudo apt install -y rsync
-      - run : mkdir ~/.ssh
-      - run : ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
+      - run: sudo apt update
+      - run: sudo apt install -y rsync
+      - run: mkdir ~/.ssh
+      - run: ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
       - run:
           name: deploy
           command: |
