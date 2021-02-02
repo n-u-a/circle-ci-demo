@@ -93,8 +93,8 @@ jobs:
             rsync -vc ${BUILD_APP} ${USER_NAME}@${HOST_NAME}:${APP_DIR}
             ssh ${USER_NAME}@${HOST_NAME} "sudo service ${APP_NAME} start"
       - slack/status:
-          success_message: ':circleci-pass: $CIRCLE_BRANCH のデプロイが完了しました\n:github_octocat: User：$CIRCLE_USERNAME'
-          failure_message: ':circleci-fail: $CIRCLE_BRANCH のデプロイが失敗しました\n:github_octocat: User：$CIRCLE_USERNAME'
+          success_message: '$CIRCLE_BRANCH のデプロイが完了しました\n User：$CIRCLE_USERNAME'
+          failure_message: '$CIRCLE_BRANCH のデプロイが失敗しました\n User：$CIRCLE_USERNAME'
           webhook: "${SLACK_WEBHOOK}"
 
 workflows:
