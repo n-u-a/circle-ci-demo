@@ -1,4 +1,8 @@
 version: 2.1
+
+orbs:
+  slack: circleci/slack@3.3.0
+
 # 共通して使用するexecutorを定義
 executors:
   my-executor:
@@ -88,6 +92,10 @@ jobs:
             ssh ${USER_NAME}@${HOST_NAME} "sudo service ${APP_NAME} stop"
             rsync -vc ${BUILD_APP} ${USER_NAME}@${HOST_NAME}:${APP_DIR}
             ssh ${USER_NAME}@${HOST_NAME} "sudo service ${APP_NAME} start"
+      - slack/status:
+          success_message: ':white-check-mark: $CIRCLE_BRANCH のデプロイが完了しました\n User：$CIRCLE_USERNAME'
+          failure_message: ':cry: $CIRCLE_BRANCH のデプロイが失敗しました\n:cry: User：$CIRCLE_USERNAME'
+          webhook: "${SLACK_WEBHOOK}"
 
 workflows:
   version: 2
