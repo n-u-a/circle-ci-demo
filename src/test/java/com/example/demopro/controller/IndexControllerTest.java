@@ -29,28 +29,11 @@ public class IndexControllerTest {
 
   @Test
   public void getIndexTest() throws Exception {
-    mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("circle-ci-share"));
-    ;
-
-    // mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"))
-    // .andExpect(xpath("/html/body/h1").string("Hello CircleCI !!"));
-
-    // MvcResult result =
-    // mockMvc.perform(get("/")).andExpect(status().isOk()).andReturn();
-    // String content = result.getResponse().getContentAsString();
-    // Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-    // .parse(new InputSource(new StringReader(content)));
-
-    // assertThat(document, hasXPath("/html/body/h1", equalTo("Hello CircleCI!!")));
+    mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"));
   }
 
   @Test
   public void testIndex() throws Exception {
-    // MvcResult result =
-    // this.mockMvc.perform(get("/")).andExpect(status().isOk()).andReturn();
-    // MockHttpServletResponse res = result.getResponse();
-    // System.out.println(res);
-    // String content = result.getResponse().getContentAsString();
-    // assertThat(content, containsString("Hello CircleCI !!"));
+
   }
 }
