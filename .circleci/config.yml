@@ -1,17 +1,21 @@
 version: 2.1
+
+orbs:
+  slack: circleci/slack@3.3.0
+
 # 共通して使用するexecutorを定義
-executors: 
+executors:
   my-executor:
     docker:
       - image: cimg/openjdk:8.0
         environment:
-          - JVM_OPTS: -Xmx3200m
-          - TERM: dumb
-          - GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+          JVM_OPTS: -Xmx3200m
+          TERM: dumb
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
       - image: circleci/postgres:9.4
         environment:
-          - POSTGRES_USER: postgres
-          - POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
 
 jobs:
   build:
@@ -24,13 +28,13 @@ jobs:
 
     steps:
       # ソースコードをチェックアウト
-      - checkout 
+      - checkout
       # 依存関係をリストア
       - restore_cache:
           keys:
-          - v1-dependencies-{{ .Branch }}-{{ checksum "build.gradle" }}
-          - v1-dependencies-{{ .Branch }}-
-          - v1-dependencies-
+            - v1-dependencies-{{ .Branch }}-{{ checksum "build.gradle" }}
+            - v1-dependencies-{{ .Branch }}-
+            - v1-dependencies-
       # testを除外してbuildを実施
       - run: gradle build -x test
       # 依存関係を保存
@@ -39,9 +43,9 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ .Branch }}-{{ checksum "build.gradle" }}
       # 他のjobでも共有するために、workspaceを永続化
-      - persist_to_workspace: 
+      - persist_to_workspace:
           root: ~/repo
-          paths: 
+          paths:
             - .
 
   test:
@@ -53,7 +57,7 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
-      - run: 
+      - run:
           name: run test !!
           command: gradle test
 
@@ -61,7 +65,7 @@ jobs:
       - store_artifacts:
           path: ./build/reports
           destination: reports
-      
+
       # テストメタデータを
       # テストサマリーセクションから確認できるようにアップロード
       - store_test_results:
@@ -69,7 +73,7 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/openjdk:8.0
+      - image: cimg/base:stable-18.04
     working_directory: ~/repo
     steps:
       - attach_workspace:
@@ -78,29 +82,38 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - ${FINGERPRINT}
-      - run : sudo apt update
-      - run : sudo apt install -y rsync
-      - run : mkdir ~/.ssh
-      - run : ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
+      - run: sudo apt update
+      - run: sudo apt install -y rsync
+      - run: mkdir ~/.ssh
+      - run: ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
       - run:
           name: deploy
           command: |
             ssh ${USER_NAME}@${HOST_NAME} "sudo service ${APP_NAME} stop"
             rsync -vc ${BUILD_APP} ${USER_NAME}@${HOST_NAME}:${APP_DIR}
             ssh ${USER_NAME}@${HOST_NAME} "sudo service ${APP_NAME} start"
+      - slack/status:
+          success_message: '$CIRCLE_BRANCH のデプロイが完了しました\n User：$CIRCLE_USERNAME'
+          failure_message: '$CIRCLE_BRANCH のデプロイが失敗しました\n User：$CIRCLE_USERNAME'
+          webhook: "${SLACK_WEBHOOK}"
 
 workflows:
   version: 2
-  build-and-test:
+  build-test-and-deploy:
     jobs:
       - build
       - test:
           requires:
             - build
-      - deploy:
+      - hold:
+          type: approval
           requires:
             - test
-          filters:
-            branches:
-              only:
-                - master
+      - deploy:
+          requires:
+            # - test
+            - hold
+          # filters:
+          #   branches:
+          #     only:
+          #       - master
