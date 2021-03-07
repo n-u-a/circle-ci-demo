@@ -105,15 +105,10 @@ workflows:
       - test:
           requires:
             - build
-      - hold:
-          type: approval
-          requires:
-            - test
       - deploy:
           requires:
-            # - test
-            - hold
-          # filters:
-          #   branches:
-          #     only:
-          #       - master
+            - test
+          filters:
+            branches:
+              only:
+                - master
